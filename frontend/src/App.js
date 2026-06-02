@@ -14,7 +14,7 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/portfolio')
+    fetch(`${process.env.REACT_APP_API_URL || ''}/api/portfolio`)
       .then(r => r.json())
       .then(d => { setData(d); setLoading(false); })
       .catch(() => setLoading(false));
