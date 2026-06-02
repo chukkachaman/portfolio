@@ -18,10 +18,11 @@ const portfolioData = {
     name: 'Chaman Tej Chukka',
     title: 'Full Stack Developer & CS Student',
     email: 'chamantej.chukka@gmail.com',
-    bio: 'Passionate computer science student with hands-on experience in full-stack development. I love building real-world applications and solving complex problems.',
-    location: 'India',
-    github: 'https://github.com',
-    linkedin: 'https://linkedin.com',
+    bio: 'Passionate CS student at IIT (BHU) Varanasi with hands-on experience in full-stack development. I love building real-world applications and solving complex problems.',
+    location: 'Varanasi, India',
+    college: 'IIT (BHU) Varanasi',
+    github: 'https://github.com/chukkachaman',
+    linkedin: 'https://www.linkedin.com/in/chaman-tej-59101033a/',
   },
   skills: [
     { category: 'Frontend', items: ['React.js', 'HTML5', 'CSS3', 'JavaScript', 'Tailwind CSS'] },
@@ -62,59 +63,48 @@ const portfolioData = {
   projects: [
     {
       id: 1,
-      title: 'StudyBud Platform',
-      description: 'A full-stack study room application where students can create rooms, join discussions, and collaborate in real time.',
-      technologies: ['Django', 'Python', 'HTML', 'CSS'],
-      github: 'https://github.com',
-      live: '',
-      image: 'studybud',
+      title: 'Portfolio Website',
+      description: 'A responsive personal portfolio built with React.js frontend and Node.js/Express backend. Features dynamic data fetching, contact form, animated UI, and is deployed on Vercel + Render.',
+      technologies: ['React.js', 'Node.js', 'Express.js', 'CSS3'],
+      github: 'https://github.com/chukkachaman/portfolio',
+      live: 'https://chamantej.vercel.app',
+      image: 'portfolio',
+      collaboration: false,
     },
     {
       id: 2,
-      title: 'Portfolio Website',
-      description: 'This responsive portfolio website built with React.js and Node.js to showcase skills, projects, and experience.',
-      technologies: ['React.js', 'Node.js', 'CSS3'],
-      github: 'https://github.com',
+      title: 'Book Recommendation System',
+      description: 'An intelligent book recommendation system using collaborative filtering and content-based algorithms. Suggests personalized book recommendations based on user preferences and reading history.',
+      technologies: ['Python', 'Machine Learning', 'Pandas', 'Scikit-learn', 'NLP'],
+      github: 'https://github.com/chukkachaman/Book_Recommendation_System',
       live: '',
-      image: 'portfolio',
+      image: 'books',
+      collaboration: true,
     },
     {
       id: 3,
-      title: 'CloudSim Simulation',
-      description: 'Cloud computing simulation project using CloudSim framework to model and analyze cloud resource scheduling algorithms.',
-      technologies: ['Java', 'CloudSim', 'Eclipse'],
-      github: 'https://github.com',
+      title: 'Stock Trading Portfolio',
+      description: 'A Python-based stock trading portfolio tracker and analyzer. Tracks stock performance, visualizes portfolio allocation, and analyzes trading patterns using real-time market data.',
+      technologies: ['Python', 'Pandas', 'Matplotlib', 'Data Analysis', 'Finance API'],
+      github: '',
       live: '',
-      image: 'cloudsim',
+      image: 'stocks',
+      collaboration: false,
     },
   ],
 };
 
-app.get('/api/portfolio', (req, res) => {
-  res.json(portfolioData);
-});
-
-app.get('/api/skills', (req, res) => {
-  res.json(portfolioData.skills);
-});
-
-app.get('/api/experience', (req, res) => {
-  res.json(portfolioData.experience);
-});
-
-app.get('/api/projects', (req, res) => {
-  res.json(portfolioData.projects);
-});
+app.get('/api/portfolio', (req, res) => res.json(portfolioData));
+app.get('/api/skills', (req, res) => res.json(portfolioData.skills));
+app.get('/api/experience', (req, res) => res.json(portfolioData.experience));
+app.get('/api/projects', (req, res) => res.json(portfolioData.projects));
 
 app.post('/api/contact', (req, res) => {
   const { name, email, message } = req.body;
-  if (!name || !email || !message) {
+  if (!name || !email || !message)
     return res.status(400).json({ error: 'All fields are required.' });
-  }
   console.log(`New contact from ${name} <${email}>: ${message}`);
   res.json({ success: true, message: 'Message received! I will get back to you soon.' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Backend running on http://localhost:${PORT}`);
-});
+app.listen(PORT, () => console.log(`Backend running on http://localhost:${PORT}`));
