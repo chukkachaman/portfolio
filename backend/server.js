@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 5000;
 
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://portfolio-chukkachamans-projects.vercel.app',
+  'https://portfolio-xi-blue-63.vercel.app',
   process.env.FRONTEND_URL,
 ].filter(Boolean);
 app.use(cors({ origin: allowedOrigins }));
