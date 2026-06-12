@@ -3,7 +3,6 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
 import Skills from './components/Skills';
-import Experience from './components/Experience';
 import Projects from './components/Projects';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
@@ -33,7 +32,6 @@ function App() {
       <Hero personal={data?.personal} />
       <About personal={data?.personal} />
       <Skills skills={data?.skills} />
-      <Experience experience={data?.experience} />
       <Projects projects={data?.projects} />
       <Contact personal={data?.personal} />
       <Footer personal={data?.personal} />
