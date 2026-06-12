@@ -1,6 +1,6 @@
 import React from 'react';
 
-const projectEmojis = { studybud: '📚', portfolio: '🌐', cloudsim: '☁️' };
+const projectEmojis = { books: '📚', stocks: '📈', portfolio: '🌐', automobile: '🚗' };
 
 export default function Projects({ projects }) {
   if (!projects) return null;
