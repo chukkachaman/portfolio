@@ -48,7 +48,7 @@ const portfolioData = {
       description: 'A stock trading simulation platform where users start with a $5,000 virtual budget to buy and sell 21 real NASDAQ/NYSE stocks. Integrates live market prices from Yahoo Finance with an interactive portfolio dashboard showing allocation and profit/loss using Chart.js.',
       technologies: ['Django', 'Python', 'SQLite', 'yfinance', 'Chart.js', 'jQuery'],
       github: 'https://github.com/chukkachaman/stock-portfolio-app',
-      live: '',
+      live: 'https://stock-portfolio-app-ubgn.onrender.com',
       image: 'stocks',
       collaboration: false,
     },
