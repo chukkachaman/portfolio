@@ -31,40 +31,31 @@ const portfolioData = {
     { category: 'Tools', items: ['Git', 'GitHub', 'VS Code', 'Postman', 'Docker'] },
     { category: 'Languages', items: ['JavaScript', 'Python', 'Java', 'C', 'C++'] },
   ],
-  experience: [
-    {
-      id: 1,
-      role: 'Full Stack Developer Intern',
-      company: 'Tech Startup',
-      duration: 'Jun 2025 – Aug 2025',
-      type: 'internship',
-      description: 'Built and maintained REST APIs using Node.js and Express. Developed responsive UI components with React.js. Worked in an Agile team environment.',
-      technologies: ['React.js', 'Node.js', 'PostgreSQL', 'Git'],
-    },
-    {
-      id: 2,
-      role: 'Web Developer Intern',
-      company: 'Digital Agency',
-      duration: 'Jan 2025 – Apr 2025',
-      type: 'internship',
-      description: 'Designed and developed client websites using React and Django. Integrated third-party APIs and improved site performance by 40%.',
-      technologies: ['Django', 'React.js', 'Python', 'MySQL'],
-    },
-    {
-      id: 3,
-      role: 'Software Engineering Intern',
-      company: 'IT Company',
-      duration: 'May 2024 – Jul 2024',
-      type: 'internship',
-      description: 'Developed automated testing scripts and assisted in backend development. Gained experience with cloud deployment on AWS.',
-      technologies: ['Python', 'AWS', 'Docker', 'Git'],
-    },
-  ],
   projects: [
     {
       id: 1,
+      title: 'Book Recommendation System',
+      description: 'A session-based book recommendation system using the STAMP (Short-Term Attention/Memory Priority) model in PyTorch. Models short-term user intent and long-term preferences from interaction sequences. Built with a React frontend and Django backend for real-time recommendations.',
+      technologies: ['PyTorch', 'Python', 'Django', 'React', 'NumPy', 'Pandas'],
+      github: 'https://github.com/chukkachaman/book-recommendation-system',
+      live: '',
+      image: 'books',
+      collaboration: true,
+    },
+    {
+      id: 2,
+      title: 'Stock Portfolio App',
+      description: 'A stock trading simulation platform where users start with a $5,000 virtual budget to buy and sell 21 real NASDAQ/NYSE stocks. Integrates live market prices from Yahoo Finance with an interactive portfolio dashboard showing allocation and profit/loss using Chart.js.',
+      technologies: ['Django', 'Python', 'SQLite', 'yfinance', 'Chart.js', 'jQuery'],
+      github: 'https://github.com/chukkachaman/stock-portfolio-app',
+      live: '',
+      image: 'stocks',
+      collaboration: false,
+    },
+    {
+      id: 3,
       title: 'Portfolio Website',
-      description: 'A responsive personal portfolio built with React.js frontend and Node.js/Express backend. Features dynamic data fetching, contact form, animated UI, and is deployed on Vercel + Render.',
+      description: 'A responsive personal portfolio built with a React.js frontend and Node.js/Express backend. Features dynamic data fetching, animated UI, and a contact form. Deployed on Vercel (frontend) and Render (backend).',
       technologies: ['React.js', 'Node.js', 'Express.js', 'CSS3'],
       github: 'https://github.com/chukkachaman/portfolio',
       live: 'https://chamantej.vercel.app',
@@ -72,23 +63,13 @@ const portfolioData = {
       collaboration: false,
     },
     {
-      id: 2,
-      title: 'Book Recommendation System',
-      description: 'An intelligent book recommendation system using collaborative filtering and content-based algorithms. Suggests personalized book recommendations based on user preferences and reading history.',
-      technologies: ['Python', 'Machine Learning', 'Pandas', 'Scikit-learn', 'NLP'],
-      github: 'https://github.com/chukkachaman/Book_Recommendation_System',
+      id: 4,
+      title: 'Automobile Shop Management System',
+      description: 'A full-stack automobile shop management platform with 8 functional modules — customer records, vehicle management, service tracking, mechanic assignments, appointments, inventory, invoice generation, and role-based access. Secured with JWT authentication (ADMIN/CUSTOMER roles).',
+      technologies: ['Spring Boot 3', 'Spring Security', 'JWT', 'React 19', 'MySQL', 'Hibernate/JPA'],
+      github: 'https://github.com/chukkachaman/Automobile_Management_System',
       live: '',
-      image: 'books',
-      collaboration: true,
-    },
-    {
-      id: 3,
-      title: 'Stock Trading Portfolio',
-      description: 'A Python-based stock trading portfolio tracker and analyzer. Tracks stock performance, visualizes portfolio allocation, and analyzes trading patterns using real-time market data.',
-      technologies: ['Python', 'Pandas', 'Matplotlib', 'Data Analysis', 'Finance API'],
-      github: '',
-      live: '',
-      image: 'stocks',
+      image: 'automobile',
       collaboration: false,
     },
   ],
@@ -96,7 +77,6 @@ const portfolioData = {
 
 app.get('/api/portfolio', (req, res) => res.json(portfolioData));
 app.get('/api/skills', (req, res) => res.json(portfolioData.skills));
-app.get('/api/experience', (req, res) => res.json(portfolioData.experience));
 app.get('/api/projects', (req, res) => res.json(portfolioData.projects));
 
 app.post('/api/contact', (req, res) => {
