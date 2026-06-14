@@ -6,6 +6,7 @@ import Skills from './components/Skills';
 import Projects from './components/Projects';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import StarBackground from './components/StarBackground';
 import './App.css';
 
 function App() {
@@ -28,13 +29,16 @@ function App() {
 
   return (
     <div className="app">
-      <Navbar personal={data?.personal} />
-      <Hero personal={data?.personal} />
-      <About personal={data?.personal} />
-      <Skills skills={data?.skills} />
-      <Projects projects={data?.projects} />
-      <Contact personal={data?.personal} />
-      <Footer personal={data?.personal} />
+      <StarBackground />
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        <Navbar personal={data?.personal} />
+        <Hero personal={data?.personal} />
+        <About personal={data?.personal} />
+        <Skills skills={data?.skills} />
+        <Projects projects={data?.projects} />
+        <Contact personal={data?.personal} />
+        <Footer personal={data?.personal} />
+      </div>
     </div>
   );
 }

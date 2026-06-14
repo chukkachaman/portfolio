@@ -53,7 +53,7 @@ export default function Hero({ personal }) {
   return (
     <section id="hero" style={{
       minHeight: '100vh', display: 'flex', alignItems: 'center',
-      position: 'relative', overflow: 'hidden', background: 'var(--bg)',
+      position: 'relative', overflow: 'hidden', background: 'transparent',
     }}>
       {/* Grid background */}
       <div style={{
@@ -186,39 +186,6 @@ export default function Hero({ personal }) {
               transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
               style={{ position: 'relative' }}
             >
-              {/* Glow ring */}
-              <div style={{
-                position: 'absolute',
-                width: 380, height: 380,
-                borderRadius: '50%',
-                background: 'radial-gradient(circle, rgba(99,102,241,0.3) 0%, rgba(139,92,246,0.2) 50%, transparent 75%)',
-                filter: 'blur(25px)',
-                top: '50%', left: '50%',
-                transform: 'translate(-50%, -50%)',
-              }} />
-
-              {/* Spinning ring */}
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-                style={{
-                  position: 'absolute',
-                  width: 420, height: 420,
-                  borderRadius: '50%',
-                  border: '1px dashed rgba(99,102,241,0.25)',
-                  top: '50%', left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                }}
-              />
-              <div style={{
-                position: 'absolute',
-                width: 390, height: 390,
-                borderRadius: '50%',
-                border: '1.5px solid rgba(99,102,241,0.2)',
-                top: '50%', left: '50%',
-                transform: 'translate(-50%, -50%)',
-              }} />
-
               {/* Photo with 3D tilt */}
               <motion.div
                 ref={photoRef}
@@ -226,18 +193,47 @@ export default function Hero({ personal }) {
                   rotateX: springX, rotateY: springY,
                   transformStyle: 'preserve-3d',
                   transformPerspective: 1000,
+                  position: 'relative',
                 }}
                 onMouseMove={onPhotoMouseMove}
                 onMouseLeave={onPhotoMouseLeave}
               >
+                {/* Outer spinning glow ring */}
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+                  style={{
+                    position: 'absolute',
+                    inset: -6,
+                    borderRadius: '50%',
+                    background: 'conic-gradient(from 0deg, #7c3aed, #06b6d4, #7c3aed)',
+                    zIndex: 0,
+                  }}
+                />
+                {/* Inner white gap ring */}
                 <div style={{
-                  width: 360, height: 420,
-                  borderRadius: '40% 60% 60% 40% / 50% 50% 50% 50%',
+                  position: 'absolute',
+                  inset: -3,
+                  borderRadius: '50%',
+                  background: 'var(--bg)',
+                  zIndex: 1,
+                }} />
+                {/* Glow behind */}
+                <div style={{
+                  position: 'absolute',
+                  inset: -20,
+                  borderRadius: '50%',
+                  background: 'radial-gradient(circle, rgba(124,58,237,0.45) 0%, rgba(6,182,212,0.2) 50%, transparent 75%)',
+                  filter: 'blur(18px)',
+                  zIndex: 0,
+                }} />
+                {/* Circular photo */}
+                <div style={{
+                  width: 340, height: 340,
+                  borderRadius: '50%',
                   overflow: 'hidden',
-                  border: '2px solid rgba(99,102,241,0.5)',
-                  boxShadow: '0 0 60px rgba(99,102,241,0.35), 0 25px 80px rgba(0,0,0,0.5)',
-                  background: 'linear-gradient(180deg, rgba(99,102,241,0.15) 0%, rgba(10,10,26,0.8) 100%)',
-                  position: 'relative', zIndex: 1,
+                  position: 'relative',
+                  zIndex: 2,
                 }}>
                   <img
                     src="/profile.png"
