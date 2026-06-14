@@ -1,6 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
 
 const roles = ['Full Stack Developer', 'React.js Enthusiast', 'Django Developer', 'CS Student @ IIT BHU', 'Problem Solver'];
+
+const container = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.13 } },
+};
+const item = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] } },
+};
 
 export default function Hero({ personal }) {
   const [roleIdx, setRoleIdx] = useState(0);
@@ -23,24 +33,66 @@ export default function Hero({ personal }) {
     return () => clearTimeout(timeout);
   }, [displayed, deleting, roleIdx]);
 
+  // 3D tilt for photo
+  const photoRef = useRef(null);
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const rotateX = useTransform(my, [-0.5, 0.5], [10, -10]);
+  const rotateY = useTransform(mx, [-0.5, 0.5], [-10, 10]);
+  const springX = useSpring(rotateX, { stiffness: 300, damping: 25 });
+  const springY = useSpring(rotateY, { stiffness: 300, damping: 25 });
+
+  const onPhotoMouseMove = (e) => {
+    const rect = photoRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    mx.set((e.clientX - rect.left) / rect.width - 0.5);
+    my.set((e.clientY - rect.top) / rect.height - 0.5);
+  };
+  const onPhotoMouseLeave = () => { mx.set(0); my.set(0); };
+
   return (
     <section id="hero" style={{
       minHeight: '100vh', display: 'flex', alignItems: 'center',
       position: 'relative', overflow: 'hidden', background: 'var(--bg)',
     }}>
-      {/* Background orbs */}
+      {/* Grid background */}
       <div style={{
-        position: 'absolute', top: '10%', right: '5%',
-        width: 600, height: 600, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(99,102,241,0.13) 0%, transparent 70%)',
-        pointerEvents: 'none',
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        backgroundImage: 'linear-gradient(rgba(99,102,241,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,0.04) 1px, transparent 1px)',
+        backgroundSize: '50px 50px',
       }} />
-      <div style={{
-        position: 'absolute', bottom: '10%', left: '5%',
-        width: 400, height: 400, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 70%)',
-        pointerEvents: 'none',
-      }} />
+
+      {/* Animated orbs */}
+      <motion.div
+        animate={{ scale: [1, 1.2, 1], opacity: [0.6, 1, 0.6] }}
+        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+        style={{
+          position: 'absolute', top: '8%', right: '3%',
+          width: 600, height: 600, borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }}
+      />
+      <motion.div
+        animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.9, 0.5] }}
+        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
+        style={{
+          position: 'absolute', bottom: '8%', left: '3%',
+          width: 450, height: 450, borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }}
+      />
+      <motion.div
+        animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.6, 0.3] }}
+        transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
+        style={{
+          position: 'absolute', top: '50%', left: '40%',
+          width: 300, height: 300, borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }}
+      />
 
       <div className="container" style={{ paddingTop: '5rem', position: 'relative', zIndex: 1, width: '100%' }}>
         <div style={{
@@ -50,21 +102,29 @@ export default function Hero({ personal }) {
           alignItems: 'center',
         }} className="hero-grid">
 
-          {/* LEFT — text content */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-
-            <span style={{
+          {/* LEFT — staggered text */}
+          <motion.div
+            variants={container}
+            initial="hidden"
+            animate="visible"
+            style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
+          >
+            <motion.span variants={item} style={{
               display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
               fontFamily: "'Fira Code', monospace", fontSize: '0.85rem',
               color: '#10b981', background: 'rgba(16,185,129,0.1)',
               border: '1px solid rgba(16,185,129,0.25)', padding: '0.35rem 1rem',
               borderRadius: '100px', width: 'fit-content',
             }}>
-              <span style={{ width: 8, height: 8, background: '#10b981', borderRadius: '50%', animation: 'pulse 2s infinite' }} />
+              <motion.span
+                animate={{ scale: [1, 1.4, 1], opacity: [1, 0.4, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                style={{ width: 8, height: 8, background: '#10b981', borderRadius: '50%', display: 'inline-block' }}
+              />
               Available for Internships
-            </span>
+            </motion.span>
 
-            <h1 style={{ fontSize: 'clamp(2.2rem, 5vw, 3.8rem)', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.02em' }}>
+            <motion.h1 variants={item} style={{ fontSize: 'clamp(2.2rem, 5vw, 3.8rem)', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.02em' }}>
               Hi, I'm{' '}
               <span style={{
                 background: 'linear-gradient(135deg, #6366f1, #8b5cf6, #06b6d4)',
@@ -72,119 +132,168 @@ export default function Hero({ personal }) {
               }}>
                 {personal?.name?.split(' ')[0] ?? 'Chaman'}
               </span>
-            </h1>
+            </motion.h1>
 
-            <div style={{ fontSize: 'clamp(1.1rem, 2.5vw, 1.5rem)', fontWeight: 600, color: '#94a3b8', minHeight: '2.5rem' }}>
+            <motion.div variants={item} style={{ fontSize: 'clamp(1.1rem, 2.5vw, 1.5rem)', fontWeight: 600, color: '#94a3b8', minHeight: '2.5rem' }}>
               <span style={{ color: '#e2e8f0' }}>{displayed}</span>
               <span style={{ borderRight: '2px solid #6366f1', marginLeft: 2, animation: 'blink 1s infinite' }} />
-            </div>
+            </motion.div>
 
-            <p style={{ fontSize: '1rem', color: '#94a3b8', lineHeight: 1.8, maxWidth: 520 }}>
+            <motion.p variants={item} style={{ fontSize: '1rem', color: '#94a3b8', lineHeight: 1.8, maxWidth: 520 }}>
               {personal?.bio ?? 'Passionate developer building real-world applications with modern technologies. Eager to contribute and learn in every opportunity.'}
-            </p>
+            </motion.p>
 
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', paddingTop: '0.5rem' }}>
-              <button className="btn btn-primary" onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}>
+            <motion.div variants={item} style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', paddingTop: '0.5rem' }}>
+              <motion.button
+                className="btn btn-primary"
+                whileHover={{ scale: 1.05, y: -3 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+              >
                 View My Work
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </button>
-              <button className="btn btn-outline" onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
+              </motion.button>
+              <motion.button
+                className="btn btn-outline"
+                whileHover={{ scale: 1.05, y: -3 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+              >
                 Get In Touch
-              </button>
-            </div>
+              </motion.button>
+            </motion.div>
 
-            <div style={{ display: 'flex', gap: '2rem', paddingTop: '1rem', borderTop: '1px solid var(--border)', marginTop: '0.5rem' }}>
+            <motion.div variants={item} style={{ display: 'flex', gap: '2rem', paddingTop: '1rem', borderTop: '1px solid var(--border)', marginTop: '0.5rem' }}>
               {[['4+', 'Projects'], ['1635', 'CF Rating'], ['1000+', 'Problems Solved']].map(([num, label]) => (
-                <div key={label}>
+                <motion.div key={label} whileHover={{ y: -4 }} transition={{ type: 'spring', stiffness: 400 }}>
                   <div style={{ fontSize: '1.5rem', fontWeight: 700, background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{num}</div>
                   <div style={{ fontSize: '0.78rem', color: '#94a3b8', marginTop: 2 }}>{label}</div>
-                </div>
+                </motion.div>
               ))}
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
-          {/* RIGHT — photo */}
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
-            {/* Glow ring behind photo */}
-            <div style={{
-              position: 'absolute',
-              width: 380, height: 380,
-              borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(99,102,241,0.25) 0%, rgba(139,92,246,0.15) 50%, transparent 75%)',
-              filter: 'blur(20px)',
-            }} />
-            {/* Decorative ring */}
-            <div style={{
-              position: 'absolute',
-              width: 400, height: 400,
-              borderRadius: '50%',
-              border: '1.5px solid rgba(99,102,241,0.25)',
-            }} />
-            <div style={{
-              position: 'absolute',
-              width: 440, height: 440,
-              borderRadius: '50%',
-              border: '1px dashed rgba(99,102,241,0.15)',
-            }} />
+          {/* RIGHT — 3D tilt photo with float */}
+          <motion.div
+            initial={{ opacity: 0, x: 60 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.9, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}
+          >
+            {/* Float wrapper */}
+            <motion.div
+              animate={{ y: [-12, 12, -12] }}
+              transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+              style={{ position: 'relative' }}
+            >
+              {/* Glow ring */}
+              <div style={{
+                position: 'absolute',
+                width: 380, height: 380,
+                borderRadius: '50%',
+                background: 'radial-gradient(circle, rgba(99,102,241,0.3) 0%, rgba(139,92,246,0.2) 50%, transparent 75%)',
+                filter: 'blur(25px)',
+                top: '50%', left: '50%',
+                transform: 'translate(-50%, -50%)',
+              }} />
 
-            {/* Photo */}
-            <div style={{
-              width: 360, height: 420,
-              borderRadius: '40% 60% 60% 40% / 50% 50% 50% 50%',
-              overflow: 'hidden',
-              border: '2px solid rgba(99,102,241,0.4)',
-              boxShadow: '0 0 40px rgba(99,102,241,0.3), 0 20px 60px rgba(0,0,0,0.4)',
-              background: 'linear-gradient(180deg, rgba(99,102,241,0.15) 0%, rgba(10,10,26,0.8) 100%)',
-              position: 'relative',
-              zIndex: 1,
-            }}>
-              <img
-                src="/profile.png"
-                alt="Chaman Tej"
+              {/* Spinning ring */}
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
                 style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  objectPosition: 'top center',
-                  mixBlendMode: 'luminosity',
-                  filter: 'contrast(1.05) brightness(1.05)',
+                  position: 'absolute',
+                  width: 420, height: 420,
+                  borderRadius: '50%',
+                  border: '1px dashed rgba(99,102,241,0.25)',
+                  top: '50%', left: '50%',
+                  transform: 'translate(-50%, -50%)',
                 }}
               />
-            </div>
+              <div style={{
+                position: 'absolute',
+                width: 390, height: 390,
+                borderRadius: '50%',
+                border: '1.5px solid rgba(99,102,241,0.2)',
+                top: '50%', left: '50%',
+                transform: 'translate(-50%, -50%)',
+              }} />
 
-            {/* Floating badge — top right */}
-            <div style={{
-              position: 'absolute', top: '5%', right: '-5%',
-              background: 'var(--card)', border: '1px solid rgba(99,102,241,0.3)',
-              borderRadius: '12px', padding: '0.6rem 1rem',
-              boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
-              display: 'flex', alignItems: 'center', gap: '0.5rem',
-              fontSize: '0.8rem', fontWeight: 600, color: '#e2e8f0',
-              zIndex: 2,
-            }}>
-              <span style={{ fontSize: '1.1rem' }}>⭐</span> Expert on CF
-            </div>
+              {/* Photo with 3D tilt */}
+              <motion.div
+                ref={photoRef}
+                style={{
+                  rotateX: springX, rotateY: springY,
+                  transformStyle: 'preserve-3d',
+                  transformPerspective: 1000,
+                }}
+                onMouseMove={onPhotoMouseMove}
+                onMouseLeave={onPhotoMouseLeave}
+              >
+                <div style={{
+                  width: 360, height: 420,
+                  borderRadius: '40% 60% 60% 40% / 50% 50% 50% 50%',
+                  overflow: 'hidden',
+                  border: '2px solid rgba(99,102,241,0.5)',
+                  boxShadow: '0 0 60px rgba(99,102,241,0.35), 0 25px 80px rgba(0,0,0,0.5)',
+                  background: 'linear-gradient(180deg, rgba(99,102,241,0.15) 0%, rgba(10,10,26,0.8) 100%)',
+                  position: 'relative', zIndex: 1,
+                }}>
+                  <img
+                    src="/profile.png"
+                    alt="Chaman Tej"
+                    style={{
+                      width: '100%', height: '100%',
+                      objectFit: 'cover', objectPosition: 'top center',
+                      filter: 'contrast(1.05) brightness(1.05)',
+                    }}
+                  />
+                </div>
+              </motion.div>
 
-            {/* Floating badge — bottom left */}
-            <div style={{
-              position: 'absolute', bottom: '10%', left: '-8%',
-              background: 'var(--card)', border: '1px solid rgba(16,185,129,0.3)',
-              borderRadius: '12px', padding: '0.6rem 1rem',
-              boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
-              display: 'flex', alignItems: 'center', gap: '0.5rem',
-              fontSize: '0.8rem', fontWeight: 600, color: '#e2e8f0',
-              zIndex: 2,
-            }}>
-              <span style={{ fontSize: '1.1rem' }}>🎓</span> IIT (BHU) Varanasi
-            </div>
-          </div>
+              {/* Floating badge — top right */}
+              <motion.div
+                animate={{ y: [-6, 6, -6] }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
+                whileHover={{ scale: 1.1 }}
+                style={{
+                  position: 'absolute', top: '5%', right: '-12%',
+                  background: 'rgba(19,19,43,0.85)', backdropFilter: 'blur(12px)',
+                  border: '1px solid rgba(99,102,241,0.4)',
+                  borderRadius: '12px', padding: '0.6rem 1rem',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+                  display: 'flex', alignItems: 'center', gap: '0.5rem',
+                  fontSize: '0.8rem', fontWeight: 600, color: '#e2e8f0', zIndex: 2,
+                }}
+              >
+                <span style={{ fontSize: '1.1rem' }}>⭐</span> Expert on CF
+              </motion.div>
+
+              {/* Floating badge — bottom left */}
+              <motion.div
+                animate={{ y: [6, -6, 6] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                whileHover={{ scale: 1.1 }}
+                style={{
+                  position: 'absolute', bottom: '10%', left: '-14%',
+                  background: 'rgba(19,19,43,0.85)', backdropFilter: 'blur(12px)',
+                  border: '1px solid rgba(16,185,129,0.4)',
+                  borderRadius: '12px', padding: '0.6rem 1rem',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+                  display: 'flex', alignItems: 'center', gap: '0.5rem',
+                  fontSize: '0.8rem', fontWeight: 600, color: '#e2e8f0', zIndex: 2,
+                }}
+              >
+                <span style={{ fontSize: '1.1rem' }}>🎓</span> IIT (BHU) Varanasi
+              </motion.div>
+            </motion.div>
+          </motion.div>
 
         </div>
       </div>
 
       <style>{`
         @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
-        @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.2); } }
         @media (max-width: 768px) {
           .hero-grid { grid-template-columns: 1fr !important; }
           .hero-grid > div:last-child { display: none !important; }
