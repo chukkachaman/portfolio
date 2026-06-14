@@ -293,7 +293,7 @@ export default function Hero({ personal }) {
         @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
         @media (max-width: 768px) {
           .hero-grid { grid-template-columns: 1fr !important; }
-          .hero-grid > div:last-child { display: none !important; }
+          .hero-grid > div:last-child { display: flex !important; justify-content: center; margin-top: 2rem; }
         }
       `}</style>
     </section>
