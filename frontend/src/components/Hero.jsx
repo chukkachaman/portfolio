@@ -229,7 +229,7 @@ export default function Hero({ personal }) {
                 }} />
                 {/* Circular photo */}
                 <div style={{
-                  width: 340, height: 340,
+                  width: 360, height: 360,
                   borderRadius: '50%',
                   overflow: 'hidden',
                   position: 'relative',
@@ -239,9 +239,10 @@ export default function Hero({ personal }) {
                     src="/profile.png"
                     alt="Chaman Tej"
                     style={{
-                      width: '100%', height: '100%',
-                      objectFit: 'cover', objectPosition: 'top center',
+                      width: '100%', height: '120%',
+                      objectFit: 'cover', objectPosition: 'center 15%',
                       filter: 'contrast(1.05) brightness(1.05)',
+                      marginTop: '-10%',
                     }}
                   />
                 </div>
